@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Liga de Freestyle El Cotorro - Generador de Temáticas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Russo+One&family=Barlow+Condensed:wght@400;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --color-primary: #ff3e00;
+            --color-secondary: #4b00ff;
+            --color-dark: #121212;
+            --color-light: #f8f8f8;
+        }
+
+        body {
+            font-family: "Barlow Condensed", sans-serif;
+            background-color: var(--color-dark);
+            color: var(--color-light);
+            background-image: url("https://cdn.pixabay.com/photo/2017/08/01/11/48/blue-2564660_1280.jpg");
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        .navbar-brand {
+            font-family: "Permanent Marker", cursive;
+            font-size: 1.8rem;
+            color: var(--color-primary) !important;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        .navbar {
+            background-color: rgba(18, 18, 18, 0.9);
+            border-bottom: 3px solid var(--color-primary);
+        }
+
+        .nav-link {
+            font-family: "Russo One", sans-serif;
+            text-transform: uppercase;
+            color: var(--color-light) !important;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary) !important;
+            transform: scale(1.05);
+        }
+
+        .main-container {
+            padding: 2rem 1rem;
+        }
+
+        .section-title {
+            font-family: "Russo One", sans-serif;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            color: var(--color-light);
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);
+            border-left: 5px solid var(--color-primary);
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .generator-card {
+            background: linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(50, 50, 50, 0.8) 100%);
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generator-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("https://cdn.pixabay.com/photo/2019/11/01/23/11/graffiti-4595432_1280.jpg") center/cover;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .btn-generate {
+            background: linear-gradient(to right, var(--color-primary), #ff8700);
+            border: none;
+            font-family: "Russo One", sans-serif;
+            text-transform: uppercase;
+            font-size: 1.4rem;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(255, 62, 0, 0.4);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 62, 0, 0.6);
+        }
+
+        .btn-generate:active {
+            transform: translateY(0);
+        }
+
+        .btn-generate::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+        }
+
+        .btn-generate:hover::after {
+            animation: btn-shine 1.5s infinite;
+        }
+
+        @keyframes btn-shine {
+            to {
+                transform: translateX(100%);
+            }
+        }
+
+        .btn-regenerate {
+            background: linear-gradient(to right, #3a3a3a, #5a5a5a);
+            font-family: "Barlow Condensed", sans-serif;
+            font-weight: bold;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-regenerate:hover {
+            background: linear-gradient(to right, #4a4a4a, #6a6a6a);
+            transform: translateY(-3px);
+        }
+
+        .theme-display {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-left: 5px solid var(--color-secondary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: all 0.5s;
+            overflow: hidden;
+        }
+
+        .theme-text {
+            font-family: "Permanent Marker", cursive;
+            font-size: 2rem;
+            color: var(--color-light);
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            margin: 0;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--color-light);
+            border-bottom-color: var(--color-primary);
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .news-card {
+            background: rgba(30, 30, 30, 0.8);
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .news-card .card-title {
+            font-family: "Russo One", sans-serif;
+            font-size: 1.5rem;
+            color: var(--color-primary);
+        }
+
+        .news-card .card-text {
+            font-family: "Barlow Condensed", sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .news-card .btn-more {
+            font-family: "Barlow Condensed", sans-serif;
+            font-weight: bold;
+            background-color: var(--color-secondary);
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .news-card .btn-more:hover {
+            background-color: #5c1cff;
+            transform: translateX(5px);
+        }
+
+        .news-img-top {
+            height: 180px;
+            object-fit: cover;
+            filter: contrast(1.1);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #303030 100%);
+            border: 2px solid var(--color-primary);
+            border-radius: 15px;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #444;
+        }
+
+        .modal-title {
+            font-family: "Russo One", sans-serif;
+            color: var(--color-primary);
+        }
+
+        .modal-body {
+            font-family: "Barlow Condensed", sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #444;
+        }
+
+        .modal-btn-close {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            font-family: "Barlow Condensed", sans-serif;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .modal-btn-close:hover {
+            background: #ff5a28;
+        }
+
+        @media (max-width: 767px) {
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .theme-text {
+                font-size: 1.5rem;
+            }
+
+            .btn-generate {
+                font-size: 1.1rem;
+                padding: 0.7rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="javascript:void(0)">
+                <i class="fas fa-microphone-alt me-2"></i>Liga de Freestyle del Cotorro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:void(0)">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)">Eventos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)">Ranking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)">Batallas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <div class="container main-container">
+        <div class="row">
+            <!-- Generador de Temáticas Section -->
+            <div class="col-lg-7 mb-4">
+                <h2 class="section-title mb-4">
+                    <i class="fas fa-random me-2"></i>Generador de Temáticas
+                </h2>
+                <div class="card generator-card">
+                    <div class="card-body text-center">
+                        <button id="generateBtn" class="btn btn-generate">
+                            <i class="fas fa-bolt me-2"></i>Generar nueva temática
+                        </button>
+                        <div class="theme-display">
+                            <div id="loader" class="loader"></div>
+                            <!-- Aquí se mostrará la temática generada -->
+                            <h3 id="themeText" class="theme-text">
+                                Presiona el botón para generar una temática
+                            </h3>
+                            <!-- Indicador de la fuente (API o local) -->
+                            <p id="sourceIndicator" style="font-size:0.9rem; color:#ccc; margin-top:0.5rem;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Noticias y Eventos Section -->
+            <div class="col-lg-5">
+                <h2 class="section-title mb-4">
+                    <i class="fas fa-newspaper me-2"></i>Noticias y Eventos
+                </h2>
+                <div class="card news-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Próximamente</h5>
+                        <p class="card-text">...</p>
+                        <button class="btn btn-more btn-sm" data-bs-toggle="modal" data-bs-target="#newsModal1">
+                            Ver más <i class="fas fa-chevron-right ms-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="footer-text mb-0">
+                        © 2025 Liga de Freestyle El Cotorro. Todos los derechos reservados.
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <div class="social-icons text-center text-md-end mt-3 mt-md-0">
+                        <a href="javascript:void(0)" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="javascript:void(0)" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="javascript:void(0)" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="javascript:void(0)" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- News Modal Example -->
+    <div class="modal fade" id="newsModal1" tabindex="-1" aria-labelledby="newsModal1Label" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newsModal1Label">Próximamente...</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn modal-btn-close" data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        body {
+            background-image: url("wall.png");
+            /* Fondo de pantalla local */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            position: relative;
+        }
+    </style>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script>
+        // Función para manejar un timeout en la petición fetch
+        function fetchWithTimeout(url, options, timeout = 15000) {
+            return Promise.race([
+                fetch(url, options),
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error("Timeout exceeded")), timeout)
+                )
+            ]);
+        }
+
+        // Lista de temas locales (fallback)
+        const themes = [
+            "Días de lluvia en casa",
+            "Café vs. té en la mañana",
+            "El tráfico y su caos",
+            "Rutina de lunes aburrido",
+            "Sueño pesado después de comer",
+            "El dilema del último pedazo de pizza",
+            "Vecinos ruidosos en la noche",
+            "Las compras del supermercado",
+            "La batalla de hacer la cama",
+            "Perros vs. gatos en casa",
+            "La espera en la fila del banco",
+            "Errores de autocorrector",
+            "Mensajes no respondidos",
+            "El sonido de una alarma",
+            "La lucha con el despertador",
+            "El dilema de elegir un outfit",
+            "El terror de perder las llaves",
+            "La misión de encontrar estacionamiento",
+            "La venganza de los mosquitos",
+            "Cuando se acaba la batería del celular"
+        ];
+
+
+        let usedThemes = [];
+
+        function getRandomTheme() {
+            let availableThemes = themes.filter(theme => !usedThemes.includes(theme));
+            if (availableThemes.length === 0) {
+                usedThemes = [];
+                availableThemes = [...themes];
+            }
+            const randomIndex = Math.floor(Math.random() * availableThemes.length);
+            const selectedTheme = availableThemes[randomIndex];
+            usedThemes.push(selectedTheme);
+            if (usedThemes.length > Math.min(10, themes.length - 1)) {
+                usedThemes.shift();
+            }
+            return selectedTheme;
+        }
+
+        // Función para generar la temática usando la API de BLOOM
+        function generateTheme() {
+            $("#themeText").hide();
+            $("#sourceIndicator").text("");
+            $("#loader").show();
+
+            // Endpoint del modelo BLOOM
+            const endpoint = "https://api-inference.huggingface.co/models/bigscience/gpt2";
+            const payload = {
+                inputs:
+                    "Generate a creative and energetic freestyle battle theme in English using no more than 5 words. Output only the theme.",
+                parameters: {
+                    max_new_tokens: 8,
+                    temperature: 0.7,
+                    top_p: 0.9,
+                    return_full_text: false
+                }
+            };
+
+            console.time("API Request");
+            fetchWithTimeout(
+                endpoint,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer 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"
+                    },
+                    body: JSON.stringify(payload)
+                },
+                15000 // Timeout de 15 segundos
+            )
+                .then(response => response.json())
+                .then(data => {
+                    console.timeEnd("API Request");
+                    let generatedText = "";
+                    let isLocal = false;
+                    if (
+                        data &&
+                        Array.isArray(data) &&
+                        data.length > 0 &&
+                        data[0].generated_text
+                    ) {
+                        generatedText = data[0].generated_text.trim();
+                    } else {
+                        generatedText = getRandomTheme();
+                        isLocal = true;
+                    }
+                    $("#loader").hide();
+                    $("#themeText").text(generatedText).fadeIn(500);
+                    $("#sourceIndicator").text(
+                        isLocal ? "(Generado localmente)" : "(Generado vía API)"
+                    );
+                })
+                .catch(error => {
+                    console.error("Error al generar temática:", error);
+                    const fallbackTheme = getRandomTheme();
+                    $("#loader").hide();
+                    $("#themeText").text(fallbackTheme).fadeIn(500);
+                    $("#sourceIndicator").text("(Generado localmente)");
+                });
+        }
+
+        $(document).ready(function () {
+            $("#generateBtn").on("click", function () {
+                generateTheme();
+            });
+        });
+    </script>
+</body>
+
+</html>
